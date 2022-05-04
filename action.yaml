@@ -82,10 +82,12 @@ runs:
           java-version: ${{inputs.java-version}}
     - name: Setup Android SDK Tools
       uses: android-actions/setup-android@v2.0.2
+
      #ORIGINARIAMENTE SOLO +x
     - name: Change wrapper permissions
       run: chmod +rwx ./gradlew
       shell: bash
+
     # Forse e' un doppione di quello sopra
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
@@ -94,12 +96,25 @@ runs:
       # Initial gradle configuration, install dependencies, etc
       run: ./gradlew help
       shell: bash
-    #- uses: actions/setup-java@v1
-      #with:
-          #java-distribution: temurin
-          # inizialmente il valore seguente era: ${{ matrix.java_version }}    e il valore [11]
-          #java-version: 11
-    #- uses: android-actions/setup-android@v2.0.2
-    #- run: chmod +rwx ./gradlew
-      #shell: bash
-    #- uses: gradle/wrapper-validation-action@v1
+
+        # Si può usare assemble invece di build (che è assemble + check)
+    - name: Build Project
+      run: ./gradlew assemble --stacktrace
+      shell: bash
+
+    # comando veramente di base (ma ricordiamo che e' possibile skippare i tests direttamente nella classe di android)
+    - name: Testa
+      run: ./gradlew test
+      shell: bash
+
+    # E converte in yaml e json
+    - uses: fabasoad/yaml-json-xml-converter-action@main
+      id: xml2yaml
+      with:
+        path: 'app/build/test-results/testDebugUnitTest/TEST-com.example.tests_vari.ExampleUnitTest.xml'
+        from: 'xml'
+        to: 'yaml'
+    - name: Print xml2json result
+      continue-on-error: true
+      run: echo "${{ steps.xml2yaml.outputs.data }}"
+      shell: bash
