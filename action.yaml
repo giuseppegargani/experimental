@@ -99,7 +99,8 @@ runs:
 
         # Si può usare assemble invece di build (che è assemble + check)
     - name: Build Project
-      run: ./gradlew assemble --stacktrace
+      # assemble --stacktrace
+      run: ./gradlew build --stacktrace
       shell: bash
 
     # comando veramente di base (ma ricordiamo che e' possibile skippare i tests direttamente nella classe di android)
