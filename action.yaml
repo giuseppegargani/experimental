@@ -204,32 +204,32 @@ runs:
         name: test
         path: app/JsonTestReport.json
 
-deploy:
-  name: Deploy
-  needs: build
-  runs-on: ubuntu-latest
-  permissions:
-      checks: write
-      contents: read
-      issues: read
-      pull-requests: write
-  steps:
-        # carica artifact con risultati test per leggerlo ed inviarlo
-      - uses: actions/download-artifact@v2
-        with:
-        name: test
-
-        - name: Verifica File
-          run: |
-            ls
-            cat ./JsonTestReport.json
-            cat JsonTestReport.json
-            `cat JsonTestReport.json`
-          shell: bash
-
-        - name: Operazioni Firebase DB
-          uses: w9jds/firebase-action@master
-          with:
-            args: database:set --force --debug  --project databasericette-beeb7 /giuseppegargani/ecchime JsonTestReport.json
-          env:
-            GCP_SA_KEY: ${{ secrets.FIREBASE_CREDENTIALS }}
+#deploy:
+#  name: Deploy
+#  needs: build
+#  runs-on: ubuntu-latest
+#  permissions:
+#      checks: write
+#      contents: read
+#      issues: read
+#      pull-requests: write
+#  steps:
+#        # carica artifact con risultati test per leggerlo ed inviarlo
+#      - uses: actions/download-artifact@v2
+#        with:
+#        name: test
+#
+#        - name: Verifica File
+#          run: |
+#            ls
+#            cat ./JsonTestReport.json
+#            cat JsonTestReport.json
+#            `cat JsonTestReport.json`
+#          shell: bash
+#
+#        - name: Operazioni Firebase DB
+#          uses: w9jds/firebase-action@master
+#          with:
+#            args: database:set --force --debug  --project databasericette-beeb7 /giuseppegargani/ecchime JsonTestReport.json
+#          env:
+#            GCP_SA_KEY: ${{ secrets.FIREBASE_CREDENTIALS }}
