@@ -47,6 +47,14 @@ inputs:
     description: 'Which Jdk version to install'
     required: false
     default: '11'
+  api-level:
+    description: 'Which API for instrumented Test '
+    required: false
+    default: '29'
+  arch:
+    description: 'Which architecture for instrumented test'
+    required: false
+    default: 'x86'
 outputs:
   random-number:
     description: "Random number"
@@ -150,4 +158,37 @@ runs:
 #          #Si devono mettere come segreto!!!
 #          value: "${{ github.repository }}"
 
+    #vecchio test
+    - name: Run Instrumentation Tests (reactivecircus)
+      uses: reactivecircus/android-emulator-runner@v2.6.1
+      with:
+        api-level: ${{ matrix.api-level }}
+        arch: ${{ matrix.arch }}
+        target: default
+        #arch: x86
+        profile: Nexus 6
+        script: |
+            ./gradlew connectedCheck
+            ./gradlew connectedAndroidTest
+            ls app/build/outputs/androidTest-results/connected
+            ls app/build/outputs/apk/androidTest
+            ls app/build/outputs/apk/debug
+            ls app/build/outputs/apk/release
+            adb install app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb install app/build/outputs/apk/debug/app-debug.apk
+            adb shell pm list instrumentation
+            adb shell am instrument -w -e class com.example.experimental.ExampleInstrumentedTest com.example.experimental.test/androidx.test.runner.AndroidJUnitRunner
+            adb shell ls sdcard/Android/data/com.example.experimental/files
+            adb shell cat sdcard/Android/data/com.example.experimental/files/JsonTestReport.json
+            adb pull sdcard/Android/data/com.example.experimental/files/JsonTestReport.json app
+            ls
+            ls app
+            ./gradlew leggiReport
+            echo FILEREPORT=app/giuseppe.txt >> $GITHUB_ENV
+            #adb devices
+            #adb shell ls sdcard/Android/data
+            #script: ./gradlew connectedCheck --stacktrace
+            #script: adb shell am instrument -w -e class com.example.tests_vari.ExampleInstrumentedTest  com.example.tests_vari.test/androidx.test.runner.AndroidJUnitRunner --rerun-tasks
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
