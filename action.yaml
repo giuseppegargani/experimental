@@ -124,7 +124,7 @@ runs:
 
     # Stampa delle variabili ambientali per cercare il relative package!!!!!
     - name: echo-default-env-variables
-        run: |
+      run: |
           echo "Home: ${HOME}"
           echo "GITHUB_WORKFLOW: ${GITHUB_WORKFLOW}"
           echo "GITHUB_ACTIONS: ${GITHUB_ACTIONS}"
@@ -135,6 +135,7 @@ runs:
           echo "GITHUB_SHA: ${GITHUB_SHA}"
           echo "GITHUB_REF: ${GITHUB_REF}"
           echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
+      shell: bash
 
     # Con il vecchio metodo di salvare su Firebase
 #    - name: Update latest version in realtime database
