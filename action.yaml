@@ -160,6 +160,7 @@ runs:
 
     #vecchio test
     - name: Run Instrumentation Tests (reactivecircus)
+      continue-on-error: true
       uses: reactivecircus/android-emulator-runner@v2.6.1
       with:
         api-level: ${{inputs.api-level}}
@@ -193,3 +194,43 @@ runs:
         env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
+    - name: Reclaim Memory
+      run: ./gradlew --stop && jps|grep -E 'KotlinCompileDaemon|GradleDaemon'| awk '{print $1}'| xargs kill -9
+      shell: bash
+
+    - name: upload test in Json file
+      uses: actions/upload-artifact@v2.2.4
+      with:
+        name: test
+        path: app/JsonTestReport.json
+
+deploy:
+  name: Deploy
+  needs: build
+  runs-on: ubuntu-latest
+  permissions:
+      checks: write
+      contents: read
+      issues: read
+      pull-requests: write
+    steps:
+
+        # carica artifact con risultati test per leggerlo ed inviarlo
+        - uses: actions/download-artifact@v2
+          with:
+            name: test
+
+        - name: Verifica File
+          run: |
+            ls
+            cat ./JsonTestReport.json
+            cat JsonTestReport.json
+            `cat JsonTestReport.json`
+          shell: bash
+
+        - name: Operazioni Firebase DB
+          uses: w9jds/firebase-action@master
+          with:
+            args: database:set --force --debug  --project databasericette-beeb7 /giuseppegargani/ecchime Example.json
+          env:
+            GCP_SA_KEY: ${{ secrets.FIREBASE_CREDENTIALS }}
