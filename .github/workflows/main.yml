@@ -1,0 +1,40 @@
+#on: [push]
+#
+#jobs:
+#  hello_world_job:
+#    runs-on: ubuntu-latest
+#    name: A job to say hello
+#    steps:
+#      - name: Hello world action step
+#        id: hello
+#        uses: giuseppegargani/first_custom_action@0.0.5
+#        with:
+#          who-to-greet: 'Mona the Octocat'
+#      # Use the output from the `hello` step
+#      - name: Get the output time
+#        run: echo "The time was ${{ steps.hello.outputs.time }}"
+# Commento
+
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: macOs-latest
+    permissions:
+      checks: write
+      contents: read
+      issues: read
+      pull-requests: write
+    name: A job to say hello
+    steps:
+      - uses: actions/checkout@v3
+      # Si potrebbe usare qualsiasi Id ma si usa per indicare delle variabili di input ed output!!!! (in questo caso si fa' riferimento ad un output!! random-number)
+      - id: foo
+        # poi si deve ricaricare esternamente!!!!!!
+        #uses: giuseppegargani/first_custom_action@0.0.10
+        uses: ./
+        with:
+          who-to-greet: 'Mona the Octocat'
+          java-version: 11
+      - run: echo random-number ${{ steps.foo.outputs.random-number }}
+        shell: bash

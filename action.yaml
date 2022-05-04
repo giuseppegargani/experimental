@@ -1,0 +1,105 @@
+# action.yml 
+# AGGIORNARE LE VERSIONI DI TUTTE LE DIPENDENZE!!!!
+# RIVERIFICARE IL FUNZIONAMENTO E RIDURLE QUANDO POSSIBILE!!!!!!!
+# CONTINUE-ON-ERROR Si puo' mettere continue-on-error: true
+
+#name: 'Barsali_Hello_World'
+#description: 'Greet someone and record the time'
+#inputs:
+  #who-to-greet:  # id of input
+    #description: 'Who to greet'
+    #required: true
+    #default: 'World'
+#outputs:
+  #time: # id of output
+    #description: 'The time we greeted you'
+#runs:
+  #using: 'docker'
+  #image: 'Dockerfile'
+  #args:
+    #- ${{ inputs.who-to-greet }}
+
+#Queste righe vanno dentro il file Dockerfile!!!!!!!!!!!!
+# Container image that runs your code
+#FROM alpine:3.10
+
+# Copies your code file from your action repository to the filesystem path `/` of the container
+#COPY entrypoint.sh /entrypoint.sh
+
+# change permission to execute the script and
+# RUN chmod +x /entrypoint.sh
+
+# Code file to execute when the docker container starts up (`entrypoint.sh`)
+#ENTRYPOINT ["/entrypoint.sh"]
+
+# Si possono anche eseguire files locali!!!!!!!!! purche' con il permesso di esecuzione!!!!
+# Si potrebbe anche scegliere di inserire una serie di operazioni in un file Linux!!! ma comunque potrebbe non essere necessario
+
+
+name: 'Barsali_Hello_World'
+description: 'Greet someone'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+  java-version: # input relativo alla versione di Jdk
+    description: 'Which Jdk version to install'
+    required: false
+    default: '11'
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  using: "composite"
+  steps:
+    - run: echo Hello ${{ inputs.who-to-greet }}.
+      shell: bash
+    - id: random-number-generator
+      run: echo "::set-output name=random-number::$(echo $RANDOM)"
+      shell: bash
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash          
+    - run: goodbye.sh
+      shell: bash
+    # qui comincia quello piu' specifico per android report!!!!
+    # si puo' anche mettere name per miglior organizzazione!!!!
+    - name: install coreutils for macOs
+      run: brew install coreutils
+      shell: bash
+    - uses: malinskiy/action-android/install-sdk@release/0.0.8
+      # controlla il checksum di gradle
+    - name: Check Gradle checksum
+      run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZacSweers/check-gradle-checksums/master/check-gradle-checksums.sh)"
+      shell: bash
+    # Il nome originario mostrava la versione SCELTA DI JAVA!!!!! Install JDK ${{ matrix.java_version }}
+    # cosi come pure la installava: java-version: ${{ matrix.java_version }}
+    - name: Install JDK ${{inputs.java-version}}
+      uses: actions/setup-java@v1
+      with:
+          #java-distribution: temurin
+          java-version: ${{inputs.java-version}}
+    - name: Setup Android SDK Tools
+      uses: android-actions/setup-android@v2.0.2
+     #ORIGINARIAMENTE SOLO +x
+    - name: Change wrapper permissions
+      run: chmod +rwx ./gradlew
+      shell: bash
+    # Forse e' un doppione di quello sopra
+    #- name: Gradle Wrapper Validation
+      #uses: gradle/wrapper-validation-action@v1
+        
+    #- name: Configure Gradle
+      # Initial gradle configuration, install dependencies, etc
+      #run: ./gradlew help  
+      #shell: bash
+    #- uses: actions/setup-java@v1
+      #with:
+          #java-distribution: temurin
+          # inizialmente il valore seguente era: ${{ matrix.java_version }}    e il valore [11]
+          #java-version: 11
+    #- uses: android-actions/setup-android@v2.0.2
+    #- run: chmod +rwx ./gradlew
+      #shell: bash
+    #- uses: gradle/wrapper-validation-action@v1
