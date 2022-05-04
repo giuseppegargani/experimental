@@ -58,11 +58,11 @@ jobs:
           ls
           cat ./JsonTestReport.json
           cat JsonTestReport.json
-          `cat JsonTestReport.json`
+        #`cat JsonTestReport.json`
 
       - name: Operazioni Firebase DB
         uses: w9jds/firebase-action@master
         with:
-          args: database:set --force --debug  --project databasericette-beeb7 /giuseppegargani/ecchime Example.json
+          args: database:set --force --debug  --project databasericette-beeb7 /giuseppegargani/ecchime JsonTestReport.json
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_CREDENTIALS }}
