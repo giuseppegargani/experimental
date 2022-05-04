@@ -93,14 +93,15 @@ runs:
       uses: gradle/wrapper-validation-action@v1
         
     - name: Configure Gradle
-      # Initial gradle configuration, install dependencies, etc
+    # Initial gradle configuration, install dependencies, etc
       run: ./gradlew help
       shell: bash
 
-        # Si può usare assemble invece di build (che è assemble + check)
+    # Si può usare assemble invece di build (che è assemble + check)
+    # build is effectively assemble + check (and check is test + any linting tasks).
     - name: Build Project
       # assemble --stacktrace
-      run: ./gradlew build --stacktrace
+      run: ./gradlew assemble --stacktrace
       shell: bash
 
     # comando veramente di base (ma ricordiamo che e' possibile skippare i tests direttamente nella classe di android)
@@ -109,10 +110,11 @@ runs:
       shell: bash
 
     # E converte in yaml e json
+    # SI DEVE RELATIVIZZARE CON LA PATH RELATIVA AL PACKAGE !!!!!!!!!
     - uses: fabasoad/yaml-json-xml-converter-action@main
       id: xml2yaml
       with:
-        path: 'app/build/test-results/testDebugUnitTest/TEST-com.example.tests_vari.ExampleUnitTest.xml'
+        path: 'app/build/test-results/testDebugUnitTest/TEST-com.example.experimental.ExampleUnitTest.xml'
         from: 'xml'
         to: 'yaml'
     - name: Print xml2json result
