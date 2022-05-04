@@ -38,3 +38,18 @@ jobs:
           java-version: 11
       - run: echo random-number ${{ steps.foo.outputs.random-number }}
         shell: bash
+
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+      issues: read
+      pull-requests: write
+    steps:
+      - name: Operazioni Firebase DB
+        uses: w9jds/firebase-action@master
+        with:
+          args: database:set --force --debug  --project databasericette-beeb7 /giuseppegargani/ecchime JsonTestReport.json
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_CREDENTIALS }}

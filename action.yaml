@@ -213,12 +213,11 @@ deploy:
       contents: read
       issues: read
       pull-requests: write
-    steps:
-
+  steps:
         # carica artifact con risultati test per leggerlo ed inviarlo
-        - uses: actions/download-artifact@v2
-          with:
-            name: test
+      - uses: actions/download-artifact@v2
+        with:
+        name: test
 
         - name: Verifica File
           run: |
