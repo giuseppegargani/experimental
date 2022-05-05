@@ -15,15 +15,14 @@ jobs:
   example_job:
     name: Pass input and secrets to my-action
     runs-on: ubuntu-latest
+    env:
+      firebase_credentials: ${{ secrets.FIREBASE_CREDENTIALS }}
     steps:
       #- uses: ./.github/workflows/my-action
       #with:
       #username: ${{ inputs.username }}
       #token: ${{ secrets.token }}
-      - run: echo $FIREBASE_CREDENTIALS
-        env:
-          STATIC_VALUE: true # populated
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }} # populated with secret
+      - run: echo ${{env.firebase_credentials}}
       - name: Verifica File
         run: echo 'reusable workflow!!!!'
         shell: bash
