@@ -1,0 +1,26 @@
+name: Reusable workflow example
+
+#SI POSSONO ANCHE METTERE DEGLI INPUT CHE VENGONO PASSATI dal Caller!!! Anche segreti possono essere passati dal caller!!!
+
+on:
+  workflow_call:
+  # inputs:
+  #   username:
+  #     required: true
+  #     type: string
+  # secrets:
+  #   token:
+  #     required: true
+
+jobs:
+  example_job:
+    name: Pass input and secrets to my-action
+    runs-on: ubuntu-latest
+    steps:
+      #- uses: ./.github/workflows/my-action
+      #with:
+      #username: ${{ inputs.username }}
+      #token: ${{ secrets.token }}
+      - name: Verifica File
+        run: echo 'reusable workflow!!!!'
+        shell: bash
