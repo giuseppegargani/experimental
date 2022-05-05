@@ -25,9 +25,8 @@ jobs:
 #      - run: echo ${{env.firebase_credentials}}
 #        shell: bash
       - name: lettura file
-        run: |
-          ls
-          echo $(cat credentials.txt)
+        run: ls
+        # echo $(cat credentials.txt)
         shell: bash
       - name: Verifica File
         run: echo 'reusable workflow!!!!'
