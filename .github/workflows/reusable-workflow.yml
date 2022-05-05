@@ -20,6 +20,10 @@ jobs:
       #with:
       #username: ${{ inputs.username }}
       #token: ${{ secrets.token }}
+      - run: echo $FIREBASE_CREDENTIALS
+        env:
+          STATIC_VALUE: true # populated
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }} # populated with secret
       - name: Verifica File
         run: echo 'reusable workflow!!!!'
         shell: bash
