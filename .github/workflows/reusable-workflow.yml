@@ -27,8 +27,8 @@ jobs:
 #      - name: lettura file
 #        run: echo $(cat credentials.txt)
 #        shell: bash
-      - name: lettura file
-        run: echo ${{ secrets }}
+      - name: prova lettura ambientali
+        run: echo ${{ secrets.FIREBASE_CREDENTIALS }}
         shell: bash
       - name: Verifica File
         run: echo 'reusable workflow!!!!'
