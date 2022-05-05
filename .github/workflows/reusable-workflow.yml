@@ -22,8 +22,8 @@ jobs:
       #with:
       #username: ${{ inputs.username }}
       #token: ${{ secrets.token }}
-      - run: echo ${{env.firebase_credentials}}
-        shell: bash
+#      - run: echo ${{env.firebase_credentials}}
+#        shell: bash
       - name: Verifica File
         run: echo 'reusable workflow!!!!'
         shell: bash
