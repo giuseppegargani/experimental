@@ -18,8 +18,12 @@
 on: [push]
 
 jobs:
+
+  # REUSABEL WORKFLOW!!!
   primo:
     uses: ./.github/workflows/reusable-workflow.yml
+
+  # PRIMO WORKFLOW (che usa una custom action!!!!!)
   build:
     runs-on: macOs-latest
     permissions:
@@ -31,10 +35,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Si potrebbe usare qualsiasi Id ma si usa per indicare delle variabili di input ed output!!!! (in questo caso si fa' riferimento ad un output!! random-number)
-      - id: foo2
-        uses: './action2.yaml'
-        with:
-          who-to-greet: 'Mona il gatto a nove code'
       - id: foo
         # poi si deve ricaricare esternamente!!!!!!
         #uses: giuseppegargani/first_custom_action@0.0.10
@@ -44,6 +44,8 @@ jobs:
           java-version: 11
       - run: echo random-number ${{ steps.foo.outputs.random-number }}
         shell: bash
+
+  # SECONDO WORKFLOW (che DIPENDE dalla conclusione del primo)
   deploy:
     name: deploy
     needs: build

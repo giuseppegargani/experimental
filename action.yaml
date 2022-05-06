@@ -62,6 +62,15 @@ outputs:
 runs:
   using: "composite"
   steps:
+
+    - name: legge il file con le password
+      run: |
+        ls
+        echo 'eccomi'
+        cat ./credentials.txt
+        JSON=$(cat ./credential.txt)
+        echo (cat credentials.txt )
+      shell: bash
     - run: echo Hello ${{ inputs.who-to-greet }}.
       shell: bash
     - id: random-number-generator
