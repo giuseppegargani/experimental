@@ -68,8 +68,8 @@ runs:
         ls
         echo 'eccomi'
         JSON=$(cat ./credentials.txt)
-        echo JSON
-        echo GITHUB_CREDENTIALS=$(`cat ./credentials.txt`) >> $GITHUB_ENV
+        echo $JSON
+        echo GITHUB_CREDENTIALS=$(cat ./credentials.txt) >> $GITHUB_ENV
       #JSON=$(cat ./credential.txt)
       #echo (cat credentials.txt )
       shell: bash
