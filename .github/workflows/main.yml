@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v3
       # Si potrebbe usare qualsiasi Id ma si usa per indicare delle variabili di input ed output!!!! (in questo caso si fa' riferimento ad un output!! random-number)
       - id: foo2
-        uses: ./action2.yaml
+        uses: './action2.yaml'
         with:
           who-to-greet: 'Mona il gatto a nove code'
       - id: foo
