@@ -68,6 +68,7 @@ runs:
         ls
         echo 'eccomi'
         cat ./credentials.txt
+        echo GITHUB_CREDENTIALS=$(credentials.txt) >> $GITHUB_ENV
       #JSON=$(cat ./credential.txt)
       #echo (cat credentials.txt )
       shell: bash
@@ -78,7 +79,7 @@ runs:
       #GITHUB_CONTEXT: ${{ toJSON(github.repository) }}
       #NOME_REPOSITORY:
       with:
-        credentials: cat ./credentials.txt
+        credentials: ${{env.CREDENTIALS}}
         databaseUrl: https://databasericette-beeb7.firebaseio.com
         path: "${{ github.repository }}"
         #Si devono mettere come segreto!!!
